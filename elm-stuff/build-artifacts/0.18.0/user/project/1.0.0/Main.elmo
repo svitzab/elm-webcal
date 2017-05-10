@@ -1,0 +1,21 @@
+var _user$project$Main$subscriptions = function (model) {
+	var _p0 = model.dragStart;
+	if (_p0.ctor === 'Nothing') {
+		return _elm_lang$core$Platform_Sub$none;
+	} else {
+		return _elm_lang$core$Platform_Sub$batch(
+			{
+				ctor: '::',
+				_0: _elm_lang$mouse$Mouse$moves(_user$project$Msgs$DragAt),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$mouse$Mouse$ups(_user$project$Msgs$DragEnd),
+					_1: {ctor: '[]'}
+				}
+			});
+	}
+};
+var _user$project$Main$now = A2(_elm_lang$core$Task$perform, _user$project$Msgs$Getnow, _elm_lang$core$Date$now);
+var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Model$initialModel, _1: _user$project$Main$now};
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{init: _user$project$Main$init, view: _user$project$View$view, update: _user$project$Update$update, subscriptions: _user$project$Main$subscriptions})();

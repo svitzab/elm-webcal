@@ -1,0 +1,225 @@
+var _user$project$Update$buildMemo = F2(
+	function (dateRanges, cal) {
+		var wkdayMems = _elm_lang$core$Array$toList(cal.wkdays);
+		var _p0 = A3(_user$project$Utilities$weekStartRange, cal.numWeeks + 2, cal.shift, cal.focused);
+		var spreadStart = _p0._0;
+		var spreadEnd = _p0._1;
+		var spread = A3(_user$project$Utilities$daysArray, spreadStart, spreadEnd, _elm_lang$core$Array$empty);
+		var values = A2(_user$project$Utilities$accumulateDays, dateRanges, spread);
+		var maxie = A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (a, b) {
+					return (_elm_lang$core$Native_Utils.cmp(a, b) > 0) ? a : b;
+				}),
+			0,
+			values);
+		var filtered = A2(
+			_elm_lang$core$Array$filter,
+			function (a) {
+				return A2(
+					_elm_lang$core$List$member,
+					_elm_lang$core$Date$dayOfWeek(a),
+					wkdayMems);
+			},
+			spread);
+		var bords = A2(_user$project$Utilities$buildBorders, filtered, cal.current);
+		var cols = _user$project$Utilities$buildColors(filtered);
+		return A6(_user$project$Model$Memo, filtered, values, maxie, _elm_lang$core$Array$empty, bords, cols);
+	});
+var _user$project$Update$iac = F5(
+	function (first, second, compare, newer, older) {
+		if (_elm_lang$core$Native_Utils.cmp(compare, 0) > 0) {
+			var sliced = A3(_elm_lang$core$Array$slice, newer, older, first);
+			return A2(_elm_lang$core$Array$append, sliced, second);
+		} else {
+			var sliced = A3(
+				_elm_lang$core$Array$slice,
+				0,
+				_elm_lang$core$Basics$negate(newer),
+				first);
+			return A2(_elm_lang$core$Array$append, second, sliced);
+		}
+	});
+var _user$project$Update$buildPartialMemo = F4(
+	function (dateRanges, cal, desired, memo) {
+		var end = _elm_lang$core$Array$length(memo.days);
+		var shift = desired.shift;
+		var chunk = _elm_lang$core$Basics$abs(shift - cal.shift);
+		var directshift = (_elm_lang$core$Native_Utils.cmp(shift, cal.shift) > 0) ? (((cal.numWeeks / 2) | 0) + 2) : _elm_lang$core$Basics$negate(((cal.numWeeks / 2) | 0) + 2);
+		var newshift = (_elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], cal.numWeeks, 2),
+			0) && (_elm_lang$core$Native_Utils.cmp(directshift, 0) > 0)) ? ((cal.shift + directshift) - 1) : (cal.shift + directshift);
+		var tempcal = _elm_lang$core$Native_Utils.update(
+			cal,
+			{shift: newshift, numWeeks: chunk - 3});
+		var partmemo = A2(_user$project$Update$buildMemo, dateRanges, tempcal);
+		var start = _elm_lang$core$Array$length(partmemo.days);
+		return A6(
+			_user$project$Model$Memo,
+			A5(_user$project$Update$iac, memo.days, partmemo.days, directshift, start, end),
+			A5(_user$project$Update$iac, memo.values, partmemo.values, directshift, start, end),
+			(_elm_lang$core$Native_Utils.cmp(partmemo.maxie, memo.maxie) > 0) ? partmemo.maxie : memo.maxie,
+			_elm_lang$core$Array$empty,
+			A5(_user$project$Update$iac, memo.borders, partmemo.borders, directshift, start, end),
+			A5(_user$project$Update$iac, memo.colors, partmemo.colors, directshift, start, end));
+	});
+var _user$project$Update$ddetect = 9;
+var _user$project$Update$infiniScroll = F4(
+	function (s, np, factor, info) {
+		var _p1 = {ctor: '_Tuple2', _0: np.x, _1: np.y};
+		var npx = _p1._0;
+		var npy = _p1._1;
+		var _p2 = {ctor: '_Tuple2', _0: s.x, _1: s.y};
+		var sx = _p2._0;
+		var sy = _p2._1;
+		var diff = {x: sx, y: info.startDisplace.y};
+		var ydiff = (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$Basics$abs(npy - sy),
+			_user$project$Update$ddetect) < 0) ? 0 : (npy - (diff.y + sy));
+		var _p3 = (_elm_lang$core$Native_Utils.cmp(ydiff, factor - 10) > -1) ? {
+			ctor: '_Tuple3',
+			_0: _elm_lang$core$Native_Utils.update(
+				diff,
+				{y: diff.y + factor}),
+			_1: info.shift - 1,
+			_2: ydiff - factor
+		} : ((_elm_lang$core$Native_Utils.cmp(
+			ydiff,
+			_elm_lang$core$Basics$negate(factor - 10)) < 1) ? {
+			ctor: '_Tuple3',
+			_0: _elm_lang$core$Native_Utils.update(
+				diff,
+				{y: diff.y - factor}),
+			_1: info.shift + 1,
+			_2: ydiff + factor
+		} : {ctor: '_Tuple3', _0: diff, _1: info.shift, _2: ydiff});
+		var nstart = _p3._0;
+		var nshift = _p3._1;
+		var rdiff = _p3._2;
+		return {
+			ctor: '_Tuple2',
+			_0: A2(_user$project$Model$ScrollInfo, nstart, nshift),
+			_1: rdiff
+		};
+	});
+var _user$project$Update$h = 50;
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'Getnow':
+				var _p5 = _p4._0;
+				var cal = model.calendar;
+				var newcal = _elm_lang$core$Native_Utils.update(
+					cal,
+					{current: _p5, focused: _p5});
+				var newmemo = A2(
+					_user$project$Update$buildMemo,
+					_user$project$Utilities$genericScrape(_elm_lang$core$Array$empty),
+					newcal);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{calendar: newcal, memoized: newmemo}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'MouseDrop':
+				var _p7 = _p4._0.className;
+				var off = (A2(_elm_lang$core$String$endsWith, 'day', _p7) || A2(_elm_lang$core$String$endsWith, 'month', _p7)) ? _elm_lang$core$Maybe$Just(_p7) : _elm_lang$core$Maybe$Nothing;
+				var pos = function () {
+					var _p6 = off;
+					if (_p6.ctor === 'Just') {
+						return _elm_lang$core$Maybe$Just(_p4._0.position);
+					} else {
+						return _elm_lang$core$Maybe$Nothing;
+					}
+				}();
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{offsetting: off, dragStart: pos}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'DragAt':
+				var _p13 = _p4._0;
+				var _p8 = model.offsetting;
+				if (_p8.ctor === 'Nothing') {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					var _p9 = _p8._0;
+					if (_p9 === 'webcal-month') {
+						var cal = model.calendar;
+						var mscos = model.scrolls;
+						var moffs = model.offsets;
+						var monthinfo = model.scrolls.months;
+						var diffie = function () {
+							var _p10 = model.dragStart;
+							if (_p10.ctor === 'Nothing') {
+								return _p13;
+							} else {
+								return _p10._0;
+							}
+						}();
+						var _p11 = A4(_user$project$Update$infiniScroll, diffie, _p13, _user$project$Update$h, monthinfo);
+						var nMonthinfo = _p11._0;
+						var nMonthdiff = _p11._1;
+						var _p12 = {
+							ctor: '_Tuple3',
+							_0: _elm_lang$core$Native_Utils.update(
+								moffs,
+								{
+									months: {x: 0, y: nMonthdiff}
+								}),
+							_1: _elm_lang$core$Native_Utils.update(
+								mscos,
+								{months: nMonthinfo}),
+							_2: _elm_lang$core$Native_Utils.update(
+								cal,
+								{shift: nMonthinfo.shift})
+						};
+						var newoffs = _p12._0;
+						var newscrolls = _p12._1;
+						var newcal = _p12._2;
+						var newmemo = _elm_lang$core$Native_Utils.eq(nMonthinfo.shift, cal.shift) ? model.memoized : A4(
+							_user$project$Update$buildPartialMemo,
+							_user$project$Utilities$genericScrape(_elm_lang$core$Array$empty),
+							cal,
+							newcal,
+							model.memoized);
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{offsets: newoffs, scrolls: newscrolls, calendar: newcal, memoized: newmemo}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					} else {
+						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+					}
+				}
+			default:
+				var offset = A2(_elm_lang$core$Maybe$withDefault, '', model.offsetting);
+				var mscos = model.scrolls;
+				var sReset = _elm_lang$core$Native_Utils.update(
+					mscos,
+					{
+						months: A2(_user$project$Model$ScrollInfo, _user$project$Model$ePos, mscos.months.shift)
+					});
+				var safe = _elm_lang$core$Native_Utils.update(
+					model,
+					{offsetting: _elm_lang$core$Maybe$Nothing, dragStart: _elm_lang$core$Maybe$Nothing, scrolls: sReset});
+				var _p14 = model.dragStart;
+				if (_p14.ctor === 'Nothing') {
+					return {ctor: '_Tuple2', _0: safe, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return (_elm_lang$core$Native_Utils.cmp(
+						_elm_lang$core$Basics$abs(_p4._0.y - _p14._0.y),
+						_user$project$Update$ddetect) < 0) ? {ctor: '_Tuple2', _0: safe, _1: _elm_lang$core$Platform_Cmd$none} : {ctor: '_Tuple2', _0: safe, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+		}
+	});

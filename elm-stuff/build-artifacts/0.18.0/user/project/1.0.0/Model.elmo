@@ -1,0 +1,125 @@
+var _user$project$Model$monthly_colors = _elm_lang$core$Array$fromList(
+	{
+		ctor: '::',
+		_0: {
+			ctor: '_Tuple2',
+			_0: A3(_elm_lang$core$Color$rgb, 249, 164, 164),
+			_1: A3(_elm_lang$core$Color$rgb, 255, 124, 124)
+		},
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: A3(_elm_lang$core$Color$rgb, 168, 204, 255),
+				_1: A3(_elm_lang$core$Color$rgb, 124, 179, 255)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: A3(_elm_lang$core$Color$rgb, 164, 252, 215),
+					_1: A3(_elm_lang$core$Color$rgb, 124, 255, 200)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: A3(_elm_lang$core$Color$rgb, 207, 170, 255),
+						_1: A3(_elm_lang$core$Color$rgb, 181, 124, 255)
+					},
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: A3(_elm_lang$core$Color$rgb, 218, 255, 173),
+							_1: A3(_elm_lang$core$Color$rgb, 196, 255, 124)
+						},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	});
+var _user$project$Model$ePos = {x: 0, y: 0};
+var _user$project$Model$Comm = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {id: a, name: b, creator: c, genre: d, medium: e, start: f, end: g, price: h, hours: i};
+	});
+var _user$project$Model$CommIds = function (a) {
+	return {ids: a};
+};
+var _user$project$Model$TranslateOffsets = F2(
+	function (a, b) {
+		return {months: a, years: b};
+	});
+var _user$project$Model$ScrollInfo = F2(
+	function (a, b) {
+		return {startDisplace: a, shift: b};
+	});
+var _user$project$Model$eScrollInfo = A2(_user$project$Model$ScrollInfo, _user$project$Model$ePos, 0);
+var _user$project$Model$Scrolls = F2(
+	function (a, b) {
+		return {months: a, years: b};
+	});
+var _user$project$Model$eScrolls = A2(_user$project$Model$Scrolls, _user$project$Model$eScrollInfo, _user$project$Model$eScrollInfo);
+var _user$project$Model$CalendarStruct = F7(
+	function (a, b, c, d, e, f, g) {
+		return {current: a, selected: b, focused: c, broken: d, numWeeks: e, shift: f, wkdays: g};
+	});
+var _user$project$Model$Memo = F6(
+	function (a, b, c, d, e, f) {
+		return {days: a, values: b, maxie: c, diffs: d, borders: e, colors: f};
+	});
+var _user$project$Model$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {scrolls: a, offsets: b, offsetting: c, dragStart: d, calendar: e, memoized: f};
+	});
+var _user$project$Model$initialModel = A6(
+	_user$project$Model$Model,
+	_user$project$Model$eScrolls,
+	A2(_user$project$Model$TranslateOffsets, _user$project$Model$ePos, _user$project$Model$ePos),
+	_elm_lang$core$Maybe$Nothing,
+	_elm_lang$core$Maybe$Nothing,
+	A7(
+		_user$project$Model$CalendarStruct,
+		_elm_lang$core$Date$fromTime(0),
+		_elm_lang$core$Array$empty,
+		_elm_lang$core$Date$fromTime(0),
+		false,
+		15,
+		0,
+		_elm_lang$core$Array$fromList(
+			{
+				ctor: '::',
+				_0: _elm_lang$core$Date$Sun,
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$Date$Mon,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$core$Date$Tue,
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$Date$Wed,
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$core$Date$Thu,
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$core$Date$Fri,
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$core$Date$Sat,
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			})),
+	A6(_user$project$Model$Memo, _elm_lang$core$Array$empty, _elm_lang$core$Array$empty, 0, _elm_lang$core$Array$empty, _elm_lang$core$Array$empty, _elm_lang$core$Array$empty));
+var _user$project$Model$AnimationClump = F2(
+	function (a, b) {
+		return {interruptible: a, whole: b};
+	});

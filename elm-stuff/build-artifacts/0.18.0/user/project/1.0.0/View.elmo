@@ -1,0 +1,684 @@
+var _user$project$View$decodeId = A3(
+	_elm_lang$core$Json_Decode$map2,
+	_user$project$Msgs$ClassMouse,
+	A2(
+		_elm_lang$core$Json_Decode$at,
+		{
+			ctor: '::',
+			_0: 'target',
+			_1: {
+				ctor: '::',
+				_0: 'className',
+				_1: {ctor: '[]'}
+			}
+		},
+		_elm_lang$core$Json_Decode$string),
+	_elm_lang$mouse$Mouse$position);
+var _user$project$View$onMouseDowns = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _user$project$View$decodeId));
+};
+var _user$project$View$posToTranslate = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'translate(',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(_p1.x),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'px, ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(_p1.y),
+					'px)'))));
+};
+var _user$project$View$toPx = function (input) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(input),
+		'px');
+};
+var _user$project$View$composeDays = function (model) {
+	var combined = A2(
+		_elm_lang$core$Array$initialize,
+		_elm_lang$core$Array$length(model.memoized.days),
+		_elm_lang$core$Basics$identity);
+	var wid = 100 / _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$Array$length(model.calendar.wkdays));
+	return _elm_lang$core$Array$toList(
+		A2(
+			_elm_lang$core$Array$map,
+			function (a) {
+				var _p2 = A2(
+					_elm_lang$core$Maybe$withDefault,
+					{ctor: '_Tuple2', _0: _elm_lang$core$Color$black, _1: _elm_lang$core$Color$black},
+					A2(_elm_lang$core$Array$get, a, model.memoized.colors));
+				var sCol = _p2._0;
+				var eCol = _p2._1;
+				var bord = A2(
+					_elm_lang$core$Maybe$withDefault,
+					0,
+					A2(_elm_lang$core$Array$get, a, model.memoized.borders));
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'width',
+												_1: A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(wid),
+													'%')
+											},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'height', _1: '50px'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'visible'},
+														_1: {
+															ctor: '::',
+															_0: (_elm_lang$core$Native_Utils.cmp(bord, 0) < 0) ? {ctor: '_Tuple2', _0: 'background', _1: '#ccc'} : {ctor: '_Tuple2', _0: 'background', _1: '#fff'},
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'})),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'margin-x', _1: '10%'},
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('webcal-day'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(
+										_elm_lang$core$Date$day(
+											A2(
+												_elm_lang$core$Maybe$withDefault,
+												_elm_lang$core$Date$fromTime(0),
+												A2(_elm_lang$core$Array$get, a, model.memoized.days))))),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					});
+			},
+			combined));
+};
+var _user$project$View$composeWkdays = function (model) {
+	var wid = 100 / _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$Array$length(model.calendar.wkdays));
+	return _elm_lang$core$Array$toList(
+		A2(
+			_elm_lang$core$Array$map,
+			function (a) {
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'width',
+												_1: A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(wid),
+													'%')
+											},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'height', _1: '30px'},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('webcal-wkday'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'line-height', _1: '30px'},
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_user$project$Utilities$wkdayString(a)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					});
+			},
+			model.calendar.wkdays));
+};
+var _user$project$View$he = 50;
+var _user$project$View$composeMonths = function (model) {
+	var scrolled = model.offsets.months.y;
+	var gap = 2;
+	var entry = 1;
+	var _p3 = A3(_user$project$Utilities$weekStartRange, model.calendar.numWeeks + 2, model.scrolls.months.shift, model.calendar.focused);
+	var s = _p3._0;
+	var e = _p3._1;
+	var months = A3(_user$project$Utilities$monthsArray, s, e, _elm_lang$core$Array$empty);
+	var emp = A2(
+		_elm_lang$core$List$repeat,
+		_elm_lang$core$Array$length(months),
+		{ctor: '[]'});
+	var prelocations = A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (a, b) {
+				var recentmonth = A3(
+					_user$project$Utilities$x_get,
+					_elm_lang$core$Array$length(b),
+					_user$project$Utilities$dda,
+					months);
+				var checkweek = A2(_user$project$Utilities$addWeek, a, s);
+				return (A2(_user$project$Utilities$sameMonth, recentmonth, checkweek) && (_elm_lang$core$Native_Utils.cmp(
+					_elm_lang$core$Array$length(b),
+					_elm_lang$core$Array$length(months)) < 0)) ? A2(_elm_lang$core$Array$push, a, b) : b;
+			}),
+		_elm_lang$core$Array$empty,
+		A2(_elm_lang$core$List$range, 0, model.calendar.numWeeks + 2));
+	var _p4 = {
+		ctor: '_Tuple2',
+		_0: A3(
+			_user$project$Utilities$x_get,
+			0,
+			_elm_lang$core$Maybe$withDefault(0),
+			prelocations),
+		_1: A3(
+			_user$project$Utilities$x_get,
+			1,
+			_elm_lang$core$Maybe$withDefault(0),
+			prelocations)
+	};
+	var zero = _p4._0;
+	var one = _p4._1;
+	var diff = one - entry;
+	var _p5 = (_elm_lang$core$Native_Utils.cmp(gap * _user$project$View$he, (diff * _user$project$View$he) + scrolled) < 0) ? {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Array$toList(
+			A3(_elm_lang$core$Array$set, 0, entry, prelocations)),
+		_1: {
+			ctor: '::',
+			_0: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'transform',
+					_1: _user$project$View$posToTranslate(
+						A2(
+							_elm_lang$mouse$Mouse$Position,
+							0,
+							_elm_lang$core$Basics$negate(scrolled)))
+				},
+				_1: {ctor: '[]'}
+			},
+			_1: A2(_elm_lang$core$List$drop, 1, emp)
+		}
+	} : ((_elm_lang$core$Native_Utils.cmp(entry * _user$project$View$he, (one * _user$project$View$he) + scrolled) > -1) ? {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Array$toList(
+			A3(_elm_lang$core$Array$set, 0, one - gap, prelocations)),
+		_1: {
+			ctor: '::',
+			_0: {ctor: '[]'},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'transform',
+						_1: _user$project$View$posToTranslate(
+							A2(
+								_elm_lang$mouse$Mouse$Position,
+								0,
+								_elm_lang$core$Basics$negate(scrolled)))
+					},
+					_1: {ctor: '[]'}
+				},
+				_1: A2(_elm_lang$core$List$drop, 2, emp)
+			}
+		}
+	} : {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Array$toList(
+			A3(_elm_lang$core$Array$set, 0, one - gap, prelocations)),
+		_1: emp
+	});
+	var locations = _p5._0;
+	var adjust = _p5._1;
+	return A2(
+		_elm_lang$core$List$map,
+		function (_p6) {
+			var _p7 = _p6;
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						A2(
+							F2(
+								function (x, y) {
+									return A2(_elm_lang$core$Basics_ops['++'], x, y);
+								}),
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'top',
+											_1: _user$project$View$toPx(_p7._1 * _user$project$View$he)
+										},
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							_p7._2)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('webcal-month'),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'width', _1: '1px'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'word-wrap', _1: 'break-word'},
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('webcal-month'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$String$toUpper(
+									A2(
+										_elm_lang$core$String$left,
+										3,
+										_user$project$Utilities$monthToString(_p7._0)))),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+		},
+		A4(
+			_elm_lang$core$List$map3,
+			F3(
+				function (v0, v1, v2) {
+					return {ctor: '_Tuple3', _0: v0, _1: v1, _2: v2};
+				}),
+			_elm_lang$core$Array$toList(months),
+			locations,
+			adjust));
+};
+var _user$project$View$view = function (model) {
+	return (_elm_lang$core$Native_Utils.eq(
+		model.calendar.current,
+		_elm_lang$core$Date$fromTime(0)) || (_elm_lang$core$Native_Utils.cmp(model.calendar.numWeeks, 1) < 0)) ? A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{ctor: '[]'}) : A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'margin-left', _1: '10%'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: '-webkit-user-select', _1: 'none'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: '-moz-user-select', _1: 'none'},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$View$onMouseDowns(_user$project$Msgs$MouseDrop),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('wc-blank'),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'width', _1: '84%'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'margin-left', _1: '16%'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'height', _1: '80px'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'move'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				},
+				_user$project$View$composeWkdays(model)),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'height',
+										_1: _user$project$View$toPx(model.calendar.numWeeks * _user$project$View$he)
+									},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'hidden'},
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'width', _1: '16%'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'font-size', _1: '2em'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'move'},
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$style(
+											{
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'height',
+													_1: _user$project$View$toPx((model.calendar.numWeeks + 2) * _user$project$View$he)
+												},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+													_1: {
+														ctor: '::',
+														_0: {
+															ctor: '_Tuple2',
+															_0: 'top',
+															_1: _user$project$View$toPx(
+																_elm_lang$core$Basics$negate(_user$project$View$he))
+														},
+														_1: {
+															ctor: '::',
+															_0: {
+																ctor: '_Tuple2',
+																_0: 'transform',
+																_1: _user$project$View$posToTranslate(model.offsets.months)
+															},
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('webcal-month'),
+											_1: {ctor: '[]'}
+										}
+									},
+									_user$project$View$composeMonths(model)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$style(
+										{
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'width', _1: '84%'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'position', _1: 'relative'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'font-size', _1: '1.2em'},
+															_1: {
+																ctor: '::',
+																_0: {
+																	ctor: '_Tuple2',
+																	_0: 'line-height',
+																	_1: _user$project$View$toPx((_user$project$View$he / 2) | 0)
+																},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'cursor', _1: 'pointer'},
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('webcal-calendar'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$style(
+												{
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: 'height',
+														_1: _user$project$View$toPx((model.calendar.numWeeks + 2) * _user$project$View$he)
+													},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+														_1: {
+															ctor: '::',
+															_0: {
+																ctor: '_Tuple2',
+																_0: 'top',
+																_1: _user$project$View$toPx(
+																	_elm_lang$core$Basics$negate(_user$project$View$he))
+															},
+															_1: {
+																ctor: '::',
+																_0: {
+																	ctor: '_Tuple2',
+																	_0: 'transform',
+																	_1: _user$project$View$posToTranslate(model.offsets.months)
+																},
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												}),
+											_1: {ctor: '[]'}
+										},
+										_user$project$View$composeDays(model)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		});
+};

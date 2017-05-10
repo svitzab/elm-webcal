@@ -1,0 +1,17 @@
+var _user$project$Msgs$ClassMouse = F2(
+	function (a, b) {
+		return {className: a, position: b};
+	});
+var _user$project$Msgs$DragEnd = function (a) {
+	return {ctor: 'DragEnd', _0: a};
+};
+var _user$project$Msgs$DragAt = function (a) {
+	return {ctor: 'DragAt', _0: a};
+};
+var _user$project$Msgs$MouseDrop = function (a) {
+	return {ctor: 'MouseDrop', _0: a};
+};
+var _user$project$Msgs$Getnow = function (a) {
+	return {ctor: 'Getnow', _0: a};
+};
+var _user$project$Msgs$NoOp = {ctor: 'NoOp'};

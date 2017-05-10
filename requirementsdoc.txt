@@ -1,0 +1,7 @@
+- async automatic messaging between 2 or more people
+- be able to add and remove users from chats
+- be able to categorize certain messages (eg, "media containing", "plain text"
+		, "predetermined 1 way checkpoint", "predetermined 2 way checkpoint")
+- be able to in emergency situations function without the db active, 
+	the fallback will be to save as much important data to the frontend as possible
+	until the db is confirmed to be back up

@@ -1,0 +1,391 @@
+var _user$project$Utilities$buildColors = function (days) {
+	return A2(
+		_elm_lang$core$Array$map,
+		function (a) {
+			var mappedMonth = _rluiten$elm_date_extra$Date_Extra_Core$monthToInt(
+				_elm_lang$core$Date$month(a));
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				{ctor: '_Tuple2', _0: _elm_lang$core$Color$black, _1: _elm_lang$core$Color$black},
+				A2(
+					_elm_lang$core$Array$get,
+					A2(
+						_elm_lang$core$Basics_ops['%'],
+						mappedMonth,
+						_elm_lang$core$Array$length(_user$project$Model$monthly_colors)),
+					_user$project$Model$monthly_colors));
+		},
+		days);
+};
+var _user$project$Utilities$datesIn = F2(
+	function (_p0, potentials) {
+		var _p1 = _p0;
+		return A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (a, b) {
+					return A4(_rluiten$elm_date_extra$Date_Extra_Compare$is3, _rluiten$elm_date_extra$Date_Extra_Compare$BetweenOpenEnd, a, _p1._0, _p1._1) ? (b + 1) : b;
+				}),
+			0,
+			potentials);
+	});
+var _user$project$Utilities$genericScrape = function (objs) {
+	return A3(
+		_elm_lang$core$Array$foldl,
+		F2(
+			function (a, b) {
+				return A2(
+					_elm_lang$core$Array$push,
+					{ctor: '_Tuple2', _0: a.start, _1: a.end},
+					b);
+			}),
+		_elm_lang$core$Array$empty,
+		objs);
+};
+var _user$project$Utilities$colToStr = function (color) {
+	var col = _elm_lang$core$Color$toRgb(color);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'rgb(',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(col.red),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				',',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(col.blue),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						',',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(col.green),
+							')'))))));
+};
+var _user$project$Utilities$strPolate = F3(
+	function (min, max, val) {
+		return _user$project$Utilities$colToStr(
+			A4(_eskimoblood$elm_color_extra$Color_Interpolate$interpolate, _eskimoblood$elm_color_extra$Color_Interpolate$RGB, min, max, val));
+	});
+var _user$project$Utilities$sameYear = F2(
+	function (first, second) {
+		var rec = A2(_rluiten$elm_date_extra$Date_Extra_Duration$diff, first, second);
+		return _elm_lang$core$Native_Utils.eq(rec.year, 0);
+	});
+var _user$project$Utilities$sameMonth = F2(
+	function (first, second) {
+		return _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$Date$month(first),
+			_elm_lang$core$Date$month(second)) && _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$Date$year(first),
+			_elm_lang$core$Date$year(second));
+	});
+var _user$project$Utilities$sameDay = F2(
+	function (first, second) {
+		return _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$Date$day(first),
+			_elm_lang$core$Date$day(second)) && (_elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$Date$month(first),
+			_elm_lang$core$Date$month(second)) && _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$Date$year(first),
+			_elm_lang$core$Date$year(second)));
+	});
+var _user$project$Utilities$addMonth = _rluiten$elm_date_extra$Date_Extra_Duration$add(_rluiten$elm_date_extra$Date_Extra_Duration$Month);
+var _user$project$Utilities$monthsArray = F3(
+	function (start, end, months) {
+		monthsArray:
+		while (true) {
+			var next = A2(_user$project$Utilities$addMonth, 1, start);
+			if (A2(_user$project$Utilities$sameMonth, start, end)) {
+				return A2(_elm_lang$core$Array$push, start, months);
+			} else {
+				var _v1 = next,
+					_v2 = end,
+					_v3 = A2(_elm_lang$core$Array$push, start, months);
+				start = _v1;
+				end = _v2;
+				months = _v3;
+				continue monthsArray;
+			}
+		}
+	});
+var _user$project$Utilities$addWeek = _rluiten$elm_date_extra$Date_Extra_Duration$add(_rluiten$elm_date_extra$Date_Extra_Duration$Week);
+var _user$project$Utilities$addDay = _rluiten$elm_date_extra$Date_Extra_Duration$add(_rluiten$elm_date_extra$Date_Extra_Duration$Day);
+var _user$project$Utilities$daysArray = F3(
+	function (start, end, days) {
+		daysArray:
+		while (true) {
+			var next = A2(_user$project$Utilities$addDay, 1, start);
+			if (A2(_user$project$Utilities$sameDay, start, end)) {
+				return A2(_elm_lang$core$Array$push, start, days);
+			} else {
+				var _v4 = next,
+					_v5 = end,
+					_v6 = A2(_elm_lang$core$Array$push, start, days);
+				start = _v4;
+				end = _v5;
+				days = _v6;
+				continue daysArray;
+			}
+		}
+	});
+var _user$project$Utilities$buildBorders = F2(
+	function (days, current) {
+		return A2(
+			_elm_lang$core$Array$map,
+			function (a) {
+				var borders = ((!A2(
+					_user$project$Utilities$sameMonth,
+					A2(_user$project$Utilities$addDay, 1, a),
+					a)) && (!_elm_lang$core$Native_Utils.eq(
+					_elm_lang$core$Date$dayOfWeek(a),
+					_elm_lang$core$Date$Sat))) ? 2 : ((!A2(
+					_user$project$Utilities$sameMonth,
+					A2(_user$project$Utilities$addWeek, 1, a),
+					a)) ? 1 : 0);
+				return (!A2(_user$project$Utilities$sameDay, a, current)) ? borders : ((_elm_lang$core$Native_Utils.cmp(borders, 0) > 0) ? _elm_lang$core$Basics$negate(borders) : -3);
+			},
+			days);
+	});
+var _user$project$Utilities$monthToString = function (date) {
+	var monthh = _elm_lang$core$Date$month(date);
+	var _p2 = monthh;
+	switch (_p2.ctor) {
+		case 'Jan':
+			return 'January';
+		case 'Feb':
+			return 'February';
+		case 'Mar':
+			return 'March';
+		case 'Apr':
+			return 'April';
+		case 'May':
+			return 'May';
+		case 'Jun':
+			return 'June';
+		case 'Jul':
+			return 'July';
+		case 'Aug':
+			return 'August';
+		case 'Sep':
+			return 'September';
+		case 'Oct':
+			return 'October';
+		case 'Nov':
+			return 'November';
+		default:
+			return 'December';
+	}
+};
+var _user$project$Utilities$wkdayString = function (date) {
+	var _p3 = date;
+	switch (_p3.ctor) {
+		case 'Sun':
+			return 'Sun';
+		case 'Mon':
+			return 'Mon';
+		case 'Tue':
+			return 'Tue';
+		case 'Wed':
+			return 'Wed';
+		case 'Thu':
+			return 'Thu';
+		case 'Fri':
+			return 'Fri';
+		default:
+			return 'Sat';
+	}
+};
+var _user$project$Utilities$wkdayInt = function (date) {
+	var dayy = _elm_lang$core$Date$dayOfWeek(date);
+	var _p4 = dayy;
+	switch (_p4.ctor) {
+		case 'Sun':
+			return 0;
+		case 'Mon':
+			return 1;
+		case 'Tue':
+			return 2;
+		case 'Wed':
+			return 3;
+		case 'Thu':
+			return 4;
+		case 'Fri':
+			return 5;
+		default:
+			return 6;
+	}
+};
+var _user$project$Utilities$weekStartRange = F3(
+	function (weeks, shift, point) {
+		var _p5 = _elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], weeks, 2),
+			1) ? {
+			ctor: '_Tuple2',
+			_0: A2(
+				_user$project$Utilities$addWeek,
+				_elm_lang$core$Basics$negate((weeks / 2) | 0),
+				point),
+			_1: A2(_user$project$Utilities$addWeek, (weeks / 2) | 0, point)
+		} : ((_elm_lang$core$Native_Utils.cmp(weeks, 0) > 0) ? {
+			ctor: '_Tuple2',
+			_0: A2(
+				_user$project$Utilities$addWeek,
+				_elm_lang$core$Basics$negate(((weeks / 2) | 0) - 1),
+				point),
+			_1: A2(_user$project$Utilities$addWeek, (weeks / 2) | 0, point)
+		} : {ctor: '_Tuple2', _0: point, _1: point});
+		var sstart = _p5._0;
+		var eend = _p5._1;
+		var _p6 = {
+			ctor: '_Tuple2',
+			_0: A2(_user$project$Utilities$addWeek, shift, sstart),
+			_1: A2(_user$project$Utilities$addWeek, shift, eend)
+		};
+		var start = _p6._0;
+		var end = _p6._1;
+		var p_beg = _user$project$Utilities$wkdayInt(start);
+		var p_end = _user$project$Utilities$wkdayInt(end);
+		return {
+			ctor: '_Tuple2',
+			_0: A2(_user$project$Utilities$addDay, 0 - p_beg, start),
+			_1: A2(_user$project$Utilities$addDay, 6 - p_end, end)
+		};
+	});
+var _user$project$Utilities$x_get = F3(
+	function (ind, func, arr) {
+		return (_elm_lang$core$Native_Utils.eq(ind, -1) || (_elm_lang$core$Native_Utils.cmp(
+			ind,
+			_elm_lang$core$Array$length(arr)) > -1)) ? func(
+			A2(
+				_elm_lang$core$Array$get,
+				_elm_lang$core$Array$length(arr) - 1,
+				arr)) : func(
+			A2(_elm_lang$core$Array$get, ind, arr));
+	});
+var _user$project$Utilities$dda = function (n) {
+	var _p7 = n;
+	if (_p7.ctor === 'Just') {
+		return _p7._0;
+	} else {
+		return _elm_lang$core$Date$fromTime(0);
+	}
+};
+var _user$project$Utilities$overlapDayInd = F2(
+	function (first, second) {
+		if (A3(
+			_rluiten$elm_date_extra$Date_Extra_Compare$is,
+			_rluiten$elm_date_extra$Date_Extra_Compare$After,
+			A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, first),
+			A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, second)) || A3(
+			_rluiten$elm_date_extra$Date_Extra_Compare$is,
+			_rluiten$elm_date_extra$Date_Extra_Compare$Before,
+			A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, first),
+			A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, second))) {
+			return _elm_lang$core$Array$empty;
+		} else {
+			var _p8 = (_elm_lang$core$Native_Utils.cmp(
+				_elm_lang$core$Array$length(first),
+				_elm_lang$core$Array$length(second)) < 0) ? {
+				ctor: '_Tuple3',
+				_0: _elm_lang$core$Array$toIndexedList(first),
+				_1: A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, second),
+				_2: A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, second)
+			} : {
+				ctor: '_Tuple3',
+				_0: _elm_lang$core$Array$toIndexedList(second),
+				_1: A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, first),
+				_2: A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, first)
+			};
+			var smaller = _p8._0;
+			var start = _p8._1;
+			var end = _p8._2;
+			return A3(
+				_elm_lang$core$List$foldl,
+				F2(
+					function (_p9, b) {
+						var _p10 = _p9;
+						return A4(_rluiten$elm_date_extra$Date_Extra_Compare$is3, _rluiten$elm_date_extra$Date_Extra_Compare$BetweenOpen, _p10._1, start, end) ? A2(_elm_lang$core$Array$push, _p10._0, b) : b;
+					}),
+				_elm_lang$core$Array$empty,
+				smaller);
+		}
+	});
+var _user$project$Utilities$objsPerDay = F3(
+	function (_p11, days, numObjs) {
+		var _p12 = _p11;
+		var o = A2(
+			_user$project$Utilities$overlapDayInd,
+			A3(_user$project$Utilities$daysArray, _p12._0, _p12._1, _elm_lang$core$Array$empty),
+			days);
+		return (_elm_lang$core$Native_Utils.cmp(
+			_elm_lang$core$Array$length(o),
+			1) < 0) ? numObjs : A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (a, b) {
+					var prev = A2(
+						_elm_lang$core$Maybe$withDefault,
+						0,
+						A2(_elm_lang$core$Array$get, a, b));
+					return A3(_elm_lang$core$Array$set, a, prev + 1, b);
+				}),
+			numObjs,
+			o);
+	});
+var _user$project$Utilities$accumulateDays = F2(
+	function (days, cal) {
+		var initial = A2(
+			_elm_lang$core$Array$repeat,
+			_elm_lang$core$Array$length(cal),
+			0);
+		return A3(
+			_elm_lang$core$Array$foldl,
+			F2(
+				function (a, b) {
+					return A3(_user$project$Utilities$objsPerDay, a, cal, initial);
+				}),
+			initial,
+			days);
+	});
+var _user$project$Utilities$overlappingDays = F2(
+	function (first, second) {
+		if (A3(
+			_rluiten$elm_date_extra$Date_Extra_Compare$is,
+			_rluiten$elm_date_extra$Date_Extra_Compare$After,
+			A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, first),
+			A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, second)) || A3(
+			_rluiten$elm_date_extra$Date_Extra_Compare$is,
+			_rluiten$elm_date_extra$Date_Extra_Compare$Before,
+			A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, first),
+			A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, second))) {
+			return _elm_lang$core$Array$empty;
+		} else {
+			var _p13 = (_elm_lang$core$Native_Utils.cmp(
+				_elm_lang$core$Array$length(first),
+				_elm_lang$core$Array$length(second)) < 0) ? {
+				ctor: '_Tuple3',
+				_0: first,
+				_1: A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, second),
+				_2: A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, second)
+			} : {
+				ctor: '_Tuple3',
+				_0: second,
+				_1: A3(_user$project$Utilities$x_get, 0, _user$project$Utilities$dda, first),
+				_2: A3(_user$project$Utilities$x_get, -1, _user$project$Utilities$dda, first)
+			};
+			var smaller = _p13._0;
+			var start = _p13._1;
+			var end = _p13._2;
+			return A3(
+				_elm_lang$core$Array$foldl,
+				F2(
+					function (a, b) {
+						return A4(_rluiten$elm_date_extra$Date_Extra_Compare$is3, _rluiten$elm_date_extra$Date_Extra_Compare$BetweenOpen, a, start, end) ? A2(_elm_lang$core$Array$push, a, b) : b;
+					}),
+				_elm_lang$core$Array$empty,
+				smaller);
+		}
+	});
